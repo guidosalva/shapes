@@ -6,3 +6,13 @@ bin/
 *.pdf
 *.toc
 *.swp
+target
+.idea
+*.iml
+*/bin
+*/.cache
+.project
+.cache
+.classpath
+.settings/*
+

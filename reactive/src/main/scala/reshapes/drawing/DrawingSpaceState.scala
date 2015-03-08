@@ -44,27 +44,27 @@ class DrawingSpaceState {
   lazy val color = Signal { Color.BLACK } //#SIG
   // filename after saving
   val fileName = Var("unnamed") //#VAR
-  
+
   // can be overridden in order to declare events declaratively
   lazy val executed: Event[Command] = new ImperativeEvent  //#EVT
   lazy val reverted: Event[Command] = new ImperativeEvent  //#EVT
-  
+
   // events that can be called imperatively
   final lazy val execute = new ImperativeEvent[Command]  //#EVT
   final lazy val revert = new ImperativeEvent[Command]  //#EVT
   final lazy val clear = new ImperativeEvent[Unit]  //#EVT
   final lazy val select = new ImperativeEvent[Shape]  //#EVT
-  
+
   private abstract class CommandType
   private case class Execute(command: Command) extends CommandType
   private case class Revert(command: Command) extends CommandType
-  private case class Clear extends CommandType
-  
+  private case object Clear extends CommandType
+
   private lazy val commandInvoked: Event[CommandType] =
     ((executed || execute) map { command: Command => Execute(command) }) || //#EF //#EF //#EF
     ((reverted || revert) map { command: Command => Revert(command) }) || //#EF //#EF //#EF
-    (clear map { _: Unit => Clear() }) //#EF
-  
+    (clear map { _: Unit => Clear }) //#EF
+
   private lazy val commandsShapes: Signal[(List[Command], List[Shape])] = //#SIG
     commandInvoked.fold((List.empty[Command], List.empty[Shape])) { //#IF
       case ((commands, shapes), commandType) => commandType match {
@@ -78,7 +78,7 @@ class DrawingSpaceState {
               (commands drop count,
                (shapes /: (commands take count)) { (shapes, command) => command revert shapes })
           }
-        case Clear() =>
+        case Clear =>
           (List.empty, List.empty)
       }
     }
@@ -92,7 +92,7 @@ class NetworkSpaceState(
     val exchangePort: Int = 9999,
     val listenerPort: Int = 1337) {
   val serverInetAddress: InetAddress = InetAddress.getByName(serverHostname)
-  
+
   // Register this client with a server and tell it
   // which port the server has to send updates to
   {
@@ -102,7 +102,7 @@ class NetworkSpaceState(
     out.close
     socket.close
   }
-  
+
   // listen for updates and send updates
   private val listener = new ServerSocket(listenerPort)
   private var updating = false
@@ -128,7 +128,7 @@ class NetworkSpaceState(
       }
     }
   }.start
-  
+
   drawingStateSpace.shapes.changed += { shapes =>  //#IF //#HDL
     if (!updating) {
       println("sending update")
@@ -140,6 +140,6 @@ class NetworkSpaceState(
       socket.close
     }
   }
-  
+
   def dispose = listener.close
 }
