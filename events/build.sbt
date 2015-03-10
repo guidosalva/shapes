@@ -1,10 +1,10 @@
-name in ThisBuild := "events"
+name := "Shapes-events"
 
-organization in ThisBuild := "de.tuda.stg"
+organization := "de.tuda.stg"
 
-version in ThisBuild := "0.0.0"
+version := "0.0.0"
 
-scalaVersion in ThisBuild := "2.11.2"
+scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.2",

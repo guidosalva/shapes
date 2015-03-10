@@ -1,8 +1,8 @@
-name in ThisBuild := "observer"
+name := "Shapes-observer"
 
-version in ThisBuild := "0.0.0"
+version := "0.0.0"
 
-scalaVersion in ThisBuild := "2.11.2"
+scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
