@@ -1,10 +1,10 @@
 lazy val root = project.in(file(".")).aggregate(events, observer, reactive)
 
-lazy val events = project.in(file("events"))
+lazy val events = project.in(file("SHAPES/events"))
 
-lazy val observer = project.in(file("observer"))
+lazy val observer = project.in(file("SHAPES/observer"))
 
-lazy val reactive = project.in(file("reactive"))
+lazy val reactive = project.in(file("SHAPES/reactive"))
 
 name in ThisBuild := "reshapes"
 
